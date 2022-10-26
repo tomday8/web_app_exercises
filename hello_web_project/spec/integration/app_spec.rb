@@ -6,11 +6,13 @@ require_relative '../../app'
 
 describe Application do
   # This is so we can use rack-test helper methods.
-  include Rack::Test::Methods
+    include Rack::Test::Methods
 
   # We need to declare the `app` value by instantiating the Application
   # class so our tests work.
-  let(:app) { Application.new }
+    let(:app) { Application.new }
+
+
 
   context "GET to /" do
     it "returns 200 OK with the right content" do
@@ -50,6 +52,14 @@ describe Application do
       response = post('/sort-names', names: 'Joe,Alice,Zoe,Julia,Kieran')
       expect(response.status).to eq(200)
       expect(response.body).to eq('Alice,Joe,Julia,Kieran,Zoe')
+    end
+  end
+
+  context "GET to /hello" do
+    it 'contains Hello! in the web page' do
+      response = get('/hello')
+  
+      expect(response.body).to include('<h1>Hello!</h1>')
     end
   end
 end
