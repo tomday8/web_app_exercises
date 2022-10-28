@@ -9,10 +9,24 @@
 <form action="/albums" method="POST">
   <label> Title: </label> <input type="text" name="title"><br>
   <label> Release Year: </label><input type="text" name="release_year"><br>
-  <label> Artist ID: </label><input type="int" name="artist_id">
+  <label> Artist ID: </label><input type="text" name="artist_id"><br>
+ 
 
-  <input type="submit" value="Submit the form">
+  <input type="submit" value="Submit">
+  <%# <input type="submit" /> %>
+  </form>
+
+ <p>  Artist not present? <a href="/add_artist">Add a new Artist before continuing.</a>
+    </p>
  <p>
   <a href="/">Go to Homepage</a> 
   </p>
-</form>
+</html>
+
+
+  <label> Artist:</label>
+        <select>
+            <% @artists.each do |artist| %>
+                <option><%= artist.name %></option>
+            <% end %>
+        </select>

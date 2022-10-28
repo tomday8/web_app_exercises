@@ -71,6 +71,15 @@ describe Application do
       expect(response.body).to include ('You saved album:')
     end
 
+    it 'validates parameters and returns 400 if incorrect' do
+      response = post(
+        '/albums',
+        invalid_artist_title: 'OK Computer',
+        another_invalid_thing: 123
+      )
+      expect(response.status).to eq(400)
+    end
+
     it 'adds album to database' do
       response = post(
         '/albums', 
@@ -116,7 +125,7 @@ describe Application do
     it 'receives an artist entry and returns 200 OK' do
       response = post('/artists', name: 'Wild Nothing', genre: 'Indie' )
       expect(response.status).to eq(200)
-      expect(response.body).to eq ('')
+      expect(response.body).to include ('You saved artist:')
      end
   
 
@@ -163,7 +172,7 @@ describe Application do
   end
 
   context 'GET /add_album' do
-    it 'gets a form and displays to user' do
+    it 'returns status 200' do
       response = get('/add_album')
       expect(response.status).to eq(200)
     end
@@ -172,20 +181,25 @@ describe Application do
       response = get('/add_album')
       expect(response.status).to eq(200)
       expect(response.body).to include ('form action="/albums" method="POST"')
+      expect(response.body).to include ('<input type="text" name="title">')
+      expect(response.body).to include ('<input type="text" name="release_year">')
+      expect(response.body).to include ('<input type="text" name="artist_id">')
     end
   end
 
 
   context 'GET /add_artist' do
-    it 'gets a form and displays to user' do
+    it 'returns status 200' do
       response = get('/add_artist')
       expect(response.status).to eq(200)
     end
 
-    xit 'gets a form and displays to user' do
-      response = get('/add_album')
+    it 'gets a form and displays to user' do
+      response = get('/add_artist')
       expect(response.status).to eq(200)
-      expect(response.body).to include ('form action="/albums" method="POST"')
+      expect(response.body).to include 'form action="/artists" method="POST"'
+      expect(response.body).to include ('<input type="text" name="name">')
+      expect(response.body).to include ('<input type="text" name="genre">')
     end
   end
 

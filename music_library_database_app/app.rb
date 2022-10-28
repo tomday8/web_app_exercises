@@ -14,16 +14,6 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
-  get '/albums/:id' do
-    repo = AlbumRepository.new
-    artist_repo = ArtistRepository.new
-
-    @album = repo.find(params[:id])
-    @artist = artist_repo.find(@album.artist_id)
-
-    return erb(:album)
-  end
-
   # BEFORE CHANGING:
   # get '/albums' do
   #   repo = AlbumRepository.new
@@ -46,7 +36,28 @@ class Application < Sinatra::Base
     return erb(:albums)
   end
 
+  get '/albums/:id' do
+    repo = AlbumRepository.new
+    artist_repo = ArtistRepository.new
+
+    @album = repo.find(params[:id])
+    @artist = artist_repo.find(@album.artist_id)
+
+    return erb(:album)
+  end
+
+  get '/add_album' do
+    repo = ArtistRepository.new
+    @artists = repo.all
+
+    return erb(:add_album)
+  end
+
   post '/albums' do
+    if invalid_request_params?
+        status 400
+        return ''
+    end
     repo = AlbumRepository.new
 
     @new_album = Album.new
@@ -56,14 +67,6 @@ class Application < Sinatra::Base
 
     repo.create(@new_album)
     return erb(:post_albums)
-  end
-
-  get '/artists/:id' do
-    artist_repo = ArtistRepository.new
-
-    @artist = artist_repo.find(params[:id])
-
-    return erb(:artist)
   end
 
   # get '/artists' do
@@ -84,8 +87,16 @@ class Application < Sinatra::Base
     return erb(:artists)
   end
 
-  get '/posts' do
-    return erb(:posts)
+  get '/artists/:id' do
+    artist_repo = ArtistRepository.new
+
+    @artist = artist_repo.find(params[:id])
+
+    return erb(:artist)
+  end
+
+  get '/add_artist' do
+    return erb(:add_artist)
   end
 
   post '/artists' do
@@ -99,12 +110,17 @@ class Application < Sinatra::Base
     return erb(:post_artists)
   end
 
-  get '/add_album' do
-    return erb(:add_album)
+  get '/posts' do
+    return erb(:posts)
   end
 
-  get '/add_artist' do
-    return erb(:add_artist)
+  def invalid_request_params?
+    return (params[:title] == nil || 
+      params[:release_year] == nil ||
+      params[:artist_id] == nil)
   end
+
+
+ 
 
 end
