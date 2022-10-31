@@ -58,6 +58,7 @@ class Application < Sinatra::Base
         status 400
         return ''
     end
+    
     repo = AlbumRepository.new
 
     @new_album = Album.new
@@ -68,6 +69,26 @@ class Application < Sinatra::Base
     repo.create(@new_album)
     return erb(:post_albums)
   end
+  
+  # post '/albums' do
+  #   # if invalid_request_params?
+  #   #     status 400
+  #   #     return ''
+  #   # end
+  #   repo = AlbumRepository.new
+  #   artist_repo = ArtistRepository.new
+  #   artist = artist_repo.find_by_artist(params[:artist_select])
+  #   input_id = artist.id
+
+  #   @new_album = Album.new
+  #   @new_album.title = params[:title]
+  #   @new_album.release_year = params[:release_year]
+  #   @new_album.artist_id = input_id
+
+  #   repo.create(@new_album)
+  #   return erb(:post_albums)
+  # end
+
 
   # get '/artists' do
   #   repo = ArtistRepository.new
